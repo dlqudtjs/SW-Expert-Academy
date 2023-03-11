@@ -1,62 +1,53 @@
-import java.util.Scanner;
 import java.io.FileInputStream;
+import java.util.Scanner;
 
-class Solution {
-    public static void main(String args[]) throws Exception {
+public class Solution {
+    static String[] arr;
+    static int max, chance;
 
+    public static void main(String[] args) throws Exception {
         System.setIn(new FileInputStream("res/input.txt"));
-
         Scanner sc = new Scanner(System.in);
-        int T;
-        T = sc.nextInt();
+        int T = sc.nextInt();
 
         for (int test_case = 1; test_case <= T; test_case++) {
-            int inputNum = sc.nextInt();
-            int changeNum = sc.nextInt();
-            int numLength = (int) Math.log10(inputNum) + 1;
+            arr = sc.next().split("");
+            chance = sc.nextInt();
 
-            int[] num = new int[numLength];
-
-            for (int i = numLength - 1; i >= 0; i--) {
-                num[i] = inputNum % 10;
-                inputNum /= 10;
+            max = 0;
+            // 시간초과 최적화
+            if (arr.length < chance) { // swap 횟수가 자릿수보다 클 때
+                chance = arr.length; // 자릿수만큼만 옮겨도 전부 옮길 수 있음
             }
 
-            int changeCnt = 0;
+            dfs(0, 0);
 
-            for (int i = 0; i < numLength; i++) {
-                int max = num[i];
-                int maxIndex = i;
+            System.out.println("#" + test_case + " " + max);
+        }
+    }
 
-                for (int searchiIndex = i; searchiIndex < numLength; searchiIndex++) {
-                    if (max <= num[searchiIndex]) {
-                        max = num[searchiIndex];
-                        maxIndex = searchiIndex;
-                    }
-                }
+    static void dfs(int start, int cnt) {
+        if (cnt == chance) {
+            String result = "";
+            for (String s : arr)
+                result += s;
+            max = Math.max(max, Integer.parseInt(result));
+            return;
+        }
 
-                if (maxIndex == i) {
-                    continue;
-                }
+        for (int i = start; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                // swap
+                String temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
 
-                int temp = num[i];
-                num[i] = num[maxIndex];
-                num[maxIndex] = temp;
-
-                changeCnt++;
-
-                if (changeCnt == changeNum) {
-                    break;
-                }
+                dfs(i, cnt + 1); // 깊이 +1
+                // 다시 swap 해서 되돌림
+                temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
             }
-
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < numLength; i++) {
-                sb.append(num[i]);
-            }
-
-            System.out.println(sb);
         }
     }
 }
