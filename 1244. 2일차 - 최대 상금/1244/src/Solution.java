@@ -6,7 +6,7 @@ public class Solution {
     static int max, chance;
 
     public static void main(String[] args) throws Exception {
-        System.setIn(new FileInputStream("res/input.txt"));
+        // System.setIn(new FileInputStream("res/input.txt"));
         Scanner sc = new Scanner(System.in);
         int T = sc.nextInt();
 
@@ -16,9 +16,9 @@ public class Solution {
 
             max = 0;
             // 시간초과 최적화
-            if (arr.length < chance) { // swap 횟수가 자릿수보다 클 때
-                chance = arr.length; // 자릿수만큼만 옮겨도 전부 옮길 수 있음
-            }
+            // if (arr.length < chance) { // swap 횟수가 자릿수보다 클 때
+            // chance = arr.length; // 자릿수만큼만 옮겨도 전부 옮길 수 있음
+            // }
 
             dfs(0, 0);
 
